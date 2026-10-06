@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KakarotOstManager/KakarotOstManager.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KakarotOstManager.Tests/KakarotOstManager.Tests.csproj" />
+  </Folder>
+</Solution>
