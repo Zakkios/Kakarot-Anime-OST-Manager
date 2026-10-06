@@ -10,7 +10,9 @@
 
   <PropertyGroup>
     <Product>Kakarot Anime OST Manager</Product>
-    <Version>0.1.0</Version>
+    <!-- Icône de l'exécutable ; les fenêtres la reprennent automatiquement. Produite à partir de Assets\app.png par tools/make-icon.ps1. -->
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <Version>0.1.1</Version>
     <!-- Langue de Strings.resx ; Strings.fr.resx est compilé à part. -->
     <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
   </PropertyGroup>

@@ -115,7 +115,49 @@ Un fichier `publish.rar` de 117 Mo s'est retrouvé à la racine du projet pendan
 
 Deux réflexes : regarder `git status` avant de commiter, et ajouter les fichiers par leur nom quand le dossier contient autre chose que du code.
 
-## 7. Exercices facultatifs
+## 7. Complément : l'icône
+
+L'exécutable de la `v0.1.0` portait l'icône générique de Windows. Il utilise maintenant l'image `src/KakarotOstManager/Assets/app.png`.
+
+### Déclarer une icône
+
+Une seule ligne dans le `.csproj` suffit :
+
+```xml
+<ApplicationIcon>Assets\app.ico</ApplicationIcon>
+```
+
+L'icône est alors incrustée dans l'exécutable : l'Explorateur, la barre des tâches et Alt+Tab l'affichent. Une fenêtre WPF qui ne précise pas d'icône reprend automatiquement celle de l'exécutable, donc la barre de titre en profite sans rien ajouter au XAML.
+
+### Du `.png` au `.ico`
+
+Windows n'accepte pas un PNG comme icône d'exécutable : il lui faut un fichier `.ico`. Un `.ico` n'est pas une image mais un **paquet d'images**, la même en plusieurs tailles. Windows choisit la plus adaptée : 16 pixels dans une barre de titre, 32 ou 48 dans l'Explorateur, 256 pour les très grandes icônes.
+
+Le script [tools/make-icon.ps1](../../tools/make-icon.ps1) fabrique ce paquet : il réduit `app.png` à neuf tailles, de 16 à 256 pixels, et les écrit dans `app.ico`. Deux fichiers cohabitent donc dans `Assets` :
+
+| Fichier | Rôle |
+|---|---|
+| `app.png` | L'image d'origine, celle qu'on modifie. |
+| `app.ico` | Le fichier produit par le script, celui que le projet utilise. |
+
+Après avoir changé `app.png`, il faut relancer le script :
+
+```text
+pwsh tools/make-icon.ps1
+```
+
+Une image très détaillée perd forcément en lisibilité à 16 pixels. Si cela devient gênant, on peut dessiner une version simplifiée réservée aux petites tailles.
+
+### Publier la version qui porte l'icône
+
+On pourrait remplacer l'exécutable joint à la `v0.1.0`. Mais un tag désigne un commit précis : l'exe d'une release doit être fabriqué à partir de ce commit-là, sinon le numéro ne veut plus rien dire. Le code ayant changé, il faut une nouvelle version, en quatre gestes :
+
+1. changer `<Version>` dans le `.csproj` ;
+2. commiter et pousser ;
+3. relancer la commande `dotnet publish` de la section 3 ;
+4. créer une release avec le nouveau tag et y déposer le nouvel exécutable.
+
+## 8. Exercices facultatifs
 
 1. **Voir la ressource.** Ajoute temporairement, dans un test, `typeof(App).Assembly.GetManifestResourceNames()` et affiche le résultat. Tu y verras `KakarotOstManager.Data.soundtracks.json`, ainsi que les ressources générées pour le XAML et les textes.
 2. **Essayer le remplacement.** Lance la publication, pose à côté de l'exécutable un dossier `Data` contenant un `soundtracks.json` réduit à une seule entrée, et relance : seule cette bande-son garde son nom, les autres passent dans « Autres ».
