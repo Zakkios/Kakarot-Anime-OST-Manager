@@ -19,6 +19,73 @@ public class SoundtrackServiceTests
         "DBZ Kakarot Soundtrack JPN Mod 07.5 - Post Game",
     ];
 
+    /// <summary>
+    /// Noms des dix-huit dossiers du pack actuel, tels que la page Nexus du
+    /// mod les donne, avec l'identifiant attendu pour chacun.
+    /// </summary>
+    public static TheoryData<string, string, SoundtrackCategory> CurrentPackFolders => new()
+    {
+        { "DBZ - Kakarot Soundtrack Mod 01 - Raditz", "01-raditz", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 02 - Saiyans", "02-saiyans", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 02.5 - Vegeta", "02.5-vegeta", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 03 - Namek", "03-namek", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 04 - Androids", "04-androids", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 05 - Cell", "05-cell", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 06 - Majin Buu", "06-majin-buu", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 07 - Kid Buu", "07-kid-buu", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 07.5 - Post Game", "07.5-post-game", SoundtrackCategory.Main },
+        { "DBZ - Kakarot Soundtrack Mod 08 - A New Power Awakens Part 1", "08-a-new-power-awakens-1", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 09 - A New Power Awakens Part 2", "09-a-new-power-awakens-2", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 10 - Trunks - The Warrior of Hope", "10-trunks", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 11 - Trunks - The Warrior of Hope - Epilogue", "11-trunks-epilogue", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 12 - Bardock - Alone Against Fate", "12-bardock", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 13 - 23rd Tenkaichi Budokai", "13-23rd-tenkaichi-budokai", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 14 - End of Z", "14-end-of-z", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 15 - Daima Part 1", "15-daima-1", SoundtrackCategory.Dlc },
+        { "DBZ - Kakarot Soundtrack Mod 16 - Daima Part 2", "16-daima-2", SoundtrackCategory.Dlc },
+    };
+
+    [Theory]
+    [MemberData(nameof(CurrentPackFolders))]
+    public void Chaque_dossier_du_pack_actuel_est_reconnu(string folderName, string expectedId, SoundtrackCategory expectedCategory)
+    {
+        using var pack = new TempDirectory();
+        AddSoundtrackFolder(pack, folderName);
+
+        Soundtrack found = Assert.Single(CreateService().FindSoundtracks(pack.Root));
+
+        Assert.Equal(expectedId, found.Id);
+        Assert.Equal(expectedCategory, found.Category);
+        Assert.NotEqual("", found.ActivationHint.Get("fr"));
+    }
+
+    [Fact]
+    public void Le_pack_complet_est_liste_histoire_d_abord_puis_DLC_sans_rien_dans_Autres()
+    {
+        using var pack = new TempDirectory();
+        foreach (var row in CurrentPackFolders.Reverse())
+        {
+            AddSoundtrackFolder(pack, (string)row[0]);
+        }
+
+        IReadOnlyList<Soundtrack> found = CreateService().FindSoundtracks(pack.Root);
+
+        Assert.Equal(CurrentPackFolders.Select(row => (string)row[1]), found.Select(soundtrack => soundtrack.Id));
+        Assert.DoesNotContain(found, soundtrack => soundtrack.Category == SoundtrackCategory.Other);
+    }
+
+    [Fact]
+    public void Le_dernier_chapitre_de_l_histoire_n_a_pas_de_DLC_pour_suivante()
+    {
+        using var pack = new TempDirectory();
+        AddSoundtrackFolder(pack, "DBZ - Kakarot Soundtrack Mod 07.5 - Post Game");
+        AddSoundtrackFolder(pack, "DBZ - Kakarot Soundtrack Mod 08 - A New Power Awakens Part 1");
+        IReadOnlyList<Soundtrack> all = CreateService().FindSoundtracks(pack.Root);
+
+        Assert.Null(SoundtrackService.GetNext(all, all.Single(soundtrack => soundtrack.Id == "07.5-post-game")));
+        Assert.Null(SoundtrackService.GetPrevious(all, all.Single(soundtrack => soundtrack.Id == "08-a-new-power-awakens-1")));
+    }
+
     /// <summary>Service branché sur le vrai soundtracks.json livré avec l'application.</summary>
     private static SoundtrackService CreateService() =>
         new(SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath));

@@ -430,6 +430,35 @@ public class MainViewModelTests
         Assert.Equal("Impossible de lancer le jeu via Steam : Steam est introuvable", screen.ViewModel.StatusMessage);
     }
 
+    // ---------------------------------------------------------------- quand l'activer
+
+    [Fact]
+    public async Task L_indication_de_l_auteur_du_mod_est_affichee_pour_la_bande_son_selectionnee()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+
+        screen.ViewModel.SelectedSoundtrack = screen.Item("03-namek");
+
+        Assert.Equal(
+            "Juste avant de monter dans le vaisseau spatial en partance pour la planète Namek.",
+            screen.ViewModel.SelectedHint);
+    }
+
+    [Fact]
+    public async Task Un_dossier_inconnu_n_a_ni_indication_ni_precedente_ou_suivante()
+    {
+        using var screen = new Screen();
+        screen.Env.Temp.CreateFile(TestEnvironment.Content("autre fichier"), "pack", "backup", "Bgm.awb");
+        await screen.ViewModel.InitializeAsync();
+
+        screen.ViewModel.SelectedSoundtrack = screen.Item("backup");
+
+        Assert.Equal("Autres", screen.Item("backup").CategoryTitle);
+        Assert.Equal("Aucune indication disponible pour le moment.", screen.ViewModel.SelectedHint);
+        Assert.False(screen.ViewModel.HasSelectedNeighbors);
+    }
+
     // ---------------------------------------------------------------- précédente, suivante
 
     [Fact]
@@ -517,7 +546,9 @@ public class MainViewModelTests
             screen.ViewModel.StatusMessage);
         Assert.All(screen.ViewModel.Soundtracks, item => Assert.Equal("Main story", item.CategoryTitle));
         Assert.Contains(screen.ViewModel.Checks, check => check.Label == "Kakarot is not running");
-        Assert.Equal("No guidance available yet for this soundtrack.", screen.ViewModel.SelectedHint);
+        Assert.Equal(
+            "Use this just before getting on the spaceship that's heading to planet Namek.",
+            screen.ViewModel.SelectedHint);
         Assert.Equal("03 — Namek", screen.ViewModel.SelectedTitle);
         Assert.True(screen.Item("03-namek").IsActive);
         Assert.Equal("en", screen.Env.SettingsService.Load().Language);

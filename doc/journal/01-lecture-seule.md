@@ -316,8 +316,8 @@ Annule tes essais avec `git restore .` avant de continuer.
 
 ## 6. Ce qui reste ouvert
 
-- **Les indications « quand activer » sont vides** dans `soundtracks.json`, et **aucun DLC n'y figure** : j'attends le texte de la page Nexus, que je ne peux pas consulter. D'ici là, un dossier DLC apparaîtra dans « Autres » et restera installable.
-- **Le chemin de la version Remaster** vient de pages web, pas d'une installation réelle. À confirmer quand le jeu sera réinstallé.
+- **Les indications « quand activer » sont vides** dans `soundtracks.json`, et **aucun DLC n'y figure** : j'attends le texte de la page Nexus, que je ne peux pas consulter. D'ici là, un dossier DLC apparaîtra dans « Autres » et restera installable. *Résolu depuis : voir [05-catalogue-complet](05-catalogue-complet.md).*
+- **Le chemin de la version Remaster** vient de pages web, pas d'une installation réelle. À confirmer quand le jeu sera réinstallé. *Confirmé depuis par la description du mod ; reste à l'essayer sur le jeu installé.*
 
 ## 7. La suite : jalon 2
 

@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:KakarotOstManager.Localization"
         Title="{loc:Loc AppTitle}"
-        Height="820" Width="1000"
-        MinHeight="720" MinWidth="900"
+        Height="820" Width="1060"
+        MinHeight="720" MinWidth="920"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -122,7 +122,7 @@
         <!-- Zone principale : liste à gauche, détail à droite -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="350" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -131,6 +131,7 @@
                            Text="{loc:Loc SoundtracksHeader}" />
                 <ListBox ItemsSource="{Binding Source={StaticResource GroupedSoundtracks}}"
                          SelectedItem="{Binding SelectedSoundtrack}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          IsEnabled="{Binding IsIdle}">
                     <ListBox.ItemContainerStyle>
                         <!-- Lignes plus compactes que celles du thème, pour voir toute l'histoire sans défiler. -->
@@ -138,6 +139,7 @@
                             <Setter Property="Padding" Value="10,5" />
                             <Setter Property="MinHeight" Value="0" />
                             <Setter Property="Margin" Value="2,1" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <!-- Nom lu par les lecteurs d'écran ; sans lui, ils liraient le nom de la classe C#. -->
                             <Setter Property="AutomationProperties.Name" Value="{Binding Title}" />
                         </Style>
@@ -155,15 +157,16 @@
                     </ListBox.GroupStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}" />
-                                <TextBlock Margin="10,0,0,0" FontWeight="SemiBold"
+                            <!-- Le repère reste entier à droite ; un titre trop long est abrégé par « … » et lisible en info-bulle. -->
+                            <DockPanel ToolTip="{Binding Title}">
+                                <TextBlock DockPanel.Dock="Right" Margin="10,0,0,0" FontWeight="SemiBold"
                                            Foreground="{StaticResource SuccessBrush}"
                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}">
                                     <Run Text="●" />
                                     <Run Text="{loc:Loc InstalledBadge}" />
                                 </TextBlock>
-                            </StackPanel>
+                                <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                            </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

@@ -182,8 +182,8 @@ Annule tes essais avec `git restore .` avant de continuer.
 
 - **Le lancement par Steam n'a pas été essayé pour de bon**, puisque le jeu n'est pas installé chez toi. Les tests vérifient l'adresse demandée, pas la réaction de Steam.
 - **La détection considère ton dossier actuel comme valide** alors que le jeu est désinstallé : il reste un dossier BGM, c'est le critère retenu. Tant que le jeu n'est pas réinstallé, « Aucun fichier Bgm.awb dans le dossier du jeu » s'affichera comme bande-son installée, ce qui est exact.
-- **Le texte Nexus manque toujours** : les indications « quand activer » sont vides et les DLC apparaissent dans « Autres ».
+- **Le texte Nexus manque toujours** : les indications « quand activer » sont vides et les DLC apparaissent dans « Autres ». *Résolu depuis : voir [05-catalogue-complet](05-catalogue-complet.md).*
 
-## 8. La suite : jalon 5
+## 8. La suite
 
-Le jalon 5 prépare la distribution : une icône, un exécutable autonome en un seul fichier, un README en français et en anglais, puis un essai complet sur le jeu réinstallé.
+Le catalogue du mod a d'abord été complété ([05-catalogue-complet](05-catalogue-complet.md)). Vient ensuite le jalon de distribution : une icône, un exécutable autonome en un seul fichier, un README en français et en anglais, puis un essai complet sur le jeu réinstallé.

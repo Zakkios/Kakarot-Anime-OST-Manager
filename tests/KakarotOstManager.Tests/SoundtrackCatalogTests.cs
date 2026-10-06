@@ -23,6 +23,34 @@ public class SoundtrackCatalogTests
     }
 
     [Fact]
+    public void Le_catalogue_livre_contient_les_neuf_bandes_son_de_DLC()
+    {
+        SoundtrackCatalog catalog = LoadShippedCatalog();
+
+        Assert.Equal(9, catalog.Soundtracks.Count(metadata => metadata.Category == SoundtrackCategory.Dlc));
+        Assert.Equal(18, catalog.Soundtracks.Count);
+    }
+
+    [Fact]
+    public void Chaque_bande_son_a_son_indication_dans_les_deux_langues()
+    {
+        Assert.All(LoadShippedCatalog().Soundtracks, metadata =>
+        {
+            Assert.False(string.IsNullOrWhiteSpace(metadata.ActivationHint.Fr), $"indication française manquante : {metadata.Id}");
+            Assert.False(string.IsNullOrWhiteSpace(metadata.ActivationHint.En), $"indication anglaise manquante : {metadata.Id}");
+        });
+    }
+
+    [Fact]
+    public void Les_numeros_et_l_ordre_d_affichage_sont_coherents()
+    {
+        var soundtracks = LoadShippedCatalog().Soundtracks;
+
+        Assert.Equal(soundtracks.OrderBy(metadata => metadata.Order), soundtracks);
+        Assert.Equal(soundtracks.Count, soundtracks.Select(metadata => metadata.Number).Distinct().Count());
+    }
+
+    [Fact]
     public void Les_identifiants_sont_uniques()
     {
         var ids = LoadShippedCatalog().Soundtracks.Select(metadata => metadata.Id).ToList();

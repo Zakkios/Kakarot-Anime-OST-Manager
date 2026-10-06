@@ -1,14 +1,17 @@
 {
-  // Métadonnées des bandes-son du mod « Definitive Japanese Anime Soundtrack ».
+  // Métadonnées des bandes-son du mod « Definitive Japanese Anime Soundtrack »
+  // de BO7AMMOOD (https://www.nexusmods.com/dragonballzkakarot/mods/94).
   //
   // "match" est une expression régulière, insensible à la casse, testée sur le
   // nom du dossier qui contient Bgm.awb. Exemple : "03\\s*-\\s*Namek" reconnaît
-  // aussi bien "03 - Namek" que "DBZ Kakarot Soundtrack JPN Mod 03 - Namek".
+  // "03 - Namek", "DBZ - Kakarot Soundtrack Mod 03 - Namek" (nom actuel des
+  // dossiers du mod) et "DBZ Kakarot Soundtrack JPN Mod 03 - Namek" (ancien nom).
   //
   // Un dossier qui ne correspond à aucune entrée reste utilisable : il est
   // affiché dans la rubrique « Autres ».
   //
-  // Les "activationHint" sont vides en attendant le texte de la page Nexus.
+  // "activationHint" : le texte anglais est celui de l'auteur du mod, repris
+  // tel quel de la page Nexus ; le texte français en est une traduction.
   "soundtracks": [
     {
       "id": "01-raditz",
@@ -17,7 +20,10 @@
       "name": { "fr": "Raditz", "en": "Raditz" },
       "category": "main",
       "order": 10,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Dès le début d'une nouvelle partie.",
+        "en": "Start with this when you start a new game."
+      }
     },
     {
       "id": "02-saiyans",
@@ -26,7 +32,10 @@
       "name": { "fr": "Saiyans", "en": "Saiyans" },
       "category": "main",
       "order": 20,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Dès que les Saiyans atterrissent sur Terre.",
+        "en": "Use this as soon as the Saiyans land on Earth."
+      }
     },
     {
       "id": "02.5-vegeta",
@@ -35,7 +44,10 @@
       "name": { "fr": "Vegeta", "en": "Vegeta" },
       "category": "main",
       "order": 25,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Dès que le dernier combat contre Nappa se termine et que vous reprenez le contrôle de Goku.",
+        "en": "Use this as soon as the final Nappa fight concludes and you gain back control of Goku."
+      }
     },
     {
       "id": "03-namek",
@@ -44,7 +56,10 @@
       "name": { "fr": "Namek", "en": "Namek" },
       "category": "main",
       "order": 30,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Juste avant de monter dans le vaisseau spatial en partance pour la planète Namek.",
+        "en": "Use this just before getting on the spaceship that's heading to planet Namek."
+      }
     },
     {
       "id": "04-androids",
@@ -53,7 +68,10 @@
       "name": { "fr": "Androids", "en": "Androids" },
       "category": "main",
       "order": 40,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Une fois l'intermède d'après Namek terminé, juste avant de parler à Chi-Chi, qui vous demandera si vous êtes prêt à vous plonger dans les études.",
+        "en": "Use this once you're done with the post Namek intermission and just before you talk to Chi Chi where she'll ask if you're ready to \"hit the books\"."
+      }
     },
     {
       "id": "05-cell",
@@ -62,7 +80,10 @@
       "name": { "fr": "Cell", "en": "Cell" },
       "category": "main",
       "order": 50,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Lorsque Bulma vous demande de la rejoindre près de Gingertown pour examiner la mystérieuse machine à voyager dans le temps.",
+        "en": "Use this once Bulma asks you to meet her near Gingertown to investigate the mysterious time machine."
+      }
     },
     {
       "id": "06-majin-buu",
@@ -71,7 +92,10 @@
       "name": { "fr": "Majin Buu", "en": "Majin Buu" },
       "category": "main",
       "order": 60,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Une fois l'intermède d'après le Cell Game terminé, juste avant de parler à Chi-Chi, qui vous demandera de rentrer à la maison après l'entraînement.",
+        "en": "Use this once you're done with the post Cell games intermission and just before you talk to Chi Chi where she'll ask you to come back home after training."
+      }
     },
     {
       "id": "07-kid-buu",
@@ -80,7 +104,10 @@
       "name": { "fr": "Kid Buu", "en": "Kid Buu" },
       "category": "main",
       "order": 70,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Lorsque vous arrivez, avec Goku, dans le monde des Kaio pour enquêter sur une énergie mystérieuse mais familière.",
+        "en": "Use this once you arrive at the Land of the Kais as Goku to investigate the mysterious yet familiar energy."
+      }
     },
     {
       "id": "07.5-post-game",
@@ -89,7 +116,118 @@
       "name": { "fr": "Post Game", "en": "Post Game" },
       "category": "main",
       "order": 75,
-      "activationHint": { "fr": "", "en": "" }
+      "activationHint": {
+        "fr": "Une fois l'histoire principale terminée, pour explorer l'après-jeu ou faire du contenu annexe.",
+        "en": "Use this once you're done with the main story and you want to mess around in the post game or do some side content."
+      }
+    },
+    {
+      "id": "08-a-new-power-awakens-1",
+      "match": "08\\s*-\\s*A\\s*New\\s*Power\\s*Awakens",
+      "number": "08",
+      "name": { "fr": "A New Power Awakens Part 1", "en": "A New Power Awakens Part 1" },
+      "category": "dlc",
+      "order": 80,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « A New Power Awakens Part 1 ».",
+        "en": "Use this before starting the \"A New Power Awakens Part 1\" DLC."
+      }
+    },
+    {
+      "id": "09-a-new-power-awakens-2",
+      "match": "09\\s*-\\s*A\\s*New\\s*Power\\s*Awakens",
+      "number": "09",
+      "name": { "fr": "A New Power Awakens Part 2", "en": "A New Power Awakens Part 2" },
+      "category": "dlc",
+      "order": 90,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « A New Power Awakens Part 2 ».",
+        "en": "Use this before starting the \"A New Power Awakens Part 2\" DLC."
+      }
+    },
+    {
+      "id": "10-trunks",
+      "match": "10\\s*-\\s*Trunks",
+      "number": "10",
+      "name": { "fr": "Trunks - The Warrior of Hope", "en": "Trunks - The Warrior of Hope" },
+      "category": "dlc",
+      "order": 100,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « Trunks - The Warrior of Hope ».",
+        "en": "Use this before starting the \"Trunks - The Warrior of Hope\" DLC."
+      }
+    },
+    {
+      "id": "11-trunks-epilogue",
+      "match": "11\\s*-\\s*Trunks",
+      "number": "11",
+      "name": { "fr": "Trunks - The Warrior of Hope - Epilogue", "en": "Trunks - The Warrior of Hope - Epilogue" },
+      "category": "dlc",
+      "order": 110,
+      "activationHint": {
+        "fr": "Après avoir terminé le DLC « Trunks - The Warrior of Hope », une fois passée la cinématique du générique de fin du DLC.",
+        "en": "Use this after finishing the \"Trunks - The Warrior of Hope\" DLC. Specifically after making it past the DLC credits cutscene!"
+      }
+    },
+    {
+      "id": "12-bardock",
+      "match": "12\\s*-\\s*Bardock",
+      "number": "12",
+      "name": { "fr": "Bardock - Alone Against Fate", "en": "Bardock - Alone Against Fate" },
+      "category": "dlc",
+      "order": 120,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « Bardock - Alone Against Fate ».",
+        "en": "Use this before starting the \"Bardock - Alone Against Fate\" DLC."
+      }
+    },
+    {
+      "id": "13-23rd-tenkaichi-budokai",
+      "match": "13\\s*-\\s*23rd\\s*Tenkaichi",
+      "number": "13",
+      "name": { "fr": "23rd Tenkaichi Budokai", "en": "23rd Tenkaichi Budokai" },
+      "category": "dlc",
+      "order": 130,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « 23rd Tenkaichi Budokai ».",
+        "en": "Use this before starting the \"23rd Tenkaichi Budokai\" DLC."
+      }
+    },
+    {
+      "id": "14-end-of-z",
+      "match": "14\\s*-\\s*End\\s*of\\s*Z",
+      "number": "14",
+      "name": { "fr": "End of Z", "en": "End of Z" },
+      "category": "dlc",
+      "order": 140,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « Goku's Next Journey ».",
+        "en": "Use this before starting the \"Goku's Next Journey\" DLC."
+      }
+    },
+    {
+      "id": "15-daima-1",
+      "match": "15\\s*-\\s*Daima",
+      "number": "15",
+      "name": { "fr": "Daima Part 1", "en": "Daima Part 1" },
+      "category": "dlc",
+      "order": 150,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « DAIMA - Adventure Through The Demon Realm PART 1 ».",
+        "en": "Use this before starting the DAIMA - Adventure Through The Demon Realm PART 1 DLC."
+      }
+    },
+    {
+      "id": "16-daima-2",
+      "match": "16\\s*-\\s*Daima",
+      "number": "16",
+      "name": { "fr": "Daima Part 2", "en": "Daima Part 2" },
+      "category": "dlc",
+      "order": 160,
+      "activationHint": {
+        "fr": "Avant de commencer le DLC « DAIMA - Adventure Through The Demon Realm PART 2 ».",
+        "en": "Use this before starting the DAIMA - Adventure Through The Demon Realm PART 2 DLC."
+      }
     }
   ]
 }
