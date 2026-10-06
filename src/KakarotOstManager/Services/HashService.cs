@@ -7,13 +7,17 @@ namespace KakarotOstManager.Services;
 /// Calcule l'empreinte SHA-256 d'un fichier. Deux Bgm.awb du mod ont la même
 /// taille : seule l'empreinte permet de savoir lequel est installé.
 /// </summary>
-public sealed class HashService
+/// <remarks>
+/// La méthode est <c>virtual</c> pour que les tests puissent simuler une
+/// relecture défaillante.
+/// </remarks>
+public class HashService
 {
     private const int BufferSize = 1024 * 1024;
 
     /// <param name="progress">Reçoit l'avancement, de 0 à 1.</param>
     /// <returns>L'empreinte en hexadécimal majuscule (64 caractères).</returns>
-    public async Task<string> ComputeSha256Async(
+    public virtual async Task<string> ComputeSha256Async(
         string filePath,
         IProgress<double>? progress = null,
         CancellationToken cancellationToken = default)

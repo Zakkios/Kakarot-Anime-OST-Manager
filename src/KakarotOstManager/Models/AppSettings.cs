@@ -6,6 +6,9 @@ namespace KakarotOstManager.Models;
 /// </summary>
 public sealed class AppSettings
 {
+    /// <summary>Valeur de <see cref="CurrentSoundtrackId"/> quand la musique originale est en place.</summary>
+    public const string VanillaId = "vanilla";
+
     /// <summary>Dossier d'installation du jeu, par exemple « …\DRAGON BALL Z KAKAROT ».</summary>
     public string? GamePath { get; set; }
 

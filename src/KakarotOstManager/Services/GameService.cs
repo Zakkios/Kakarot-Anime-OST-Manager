@@ -19,9 +19,23 @@ public enum GameDirectoryStatus
 }
 
 /// <summary>Tout ce qui concerne l'installation du jeu sur le disque.</summary>
-public sealed class GameService
+public sealed class GameService(IProcessProbe? processProbe = null)
 {
     public const string BgmFileName = "Bgm.awb";
+
+    /// <summary>
+    /// Nom du processus du jeu, sans « .exe ». Kakarot est un jeu Unreal
+    /// Engine dont le projet s'appelle « AT ».
+    /// </summary>
+    public const string GameProcessName = "AT-Win64-Shipping";
+
+    private readonly IProcessProbe _processProbe = processProbe ?? new SystemProcessProbe();
+
+    /// <summary>
+    /// Tant que le jeu tourne, il garde Bgm.awb ouvert : le fichier ne doit
+    /// pas être remplacé.
+    /// </summary>
+    public bool IsKakarotRunning() => _processProbe.IsRunning(GameProcessName);
 
     /// <summary>
     /// Dossier dans lequel le jeu lit Bgm.awb, calculé à partir du dossier

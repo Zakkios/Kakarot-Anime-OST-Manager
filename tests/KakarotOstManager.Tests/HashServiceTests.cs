@@ -47,7 +47,7 @@ public class HashServiceTests
         // 2,5 Mo : le fichier est lu en trois blocs de 1 Mo au plus.
         string file = temp.Combine("gros.bin");
         File.WriteAllBytes(file, new byte[2_500_000]);
-        var progress = new RecordingProgress();
+        var progress = new RecordingProgress<double>();
 
         await _service.ComputeSha256Async(file, progress);
 
@@ -66,16 +66,5 @@ public class HashServiceTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(
             () => _service.ComputeSha256Async(file, cancellationToken: cancellation.Token));
-    }
-
-    /// <summary>
-    /// Enregistre chaque valeur reçue, immédiatement. La classe Progress de
-    /// .NET les transmet en différé, ce qui rendrait le test imprévisible.
-    /// </summary>
-    private sealed class RecordingProgress : IProgress<double>
-    {
-        public List<double> Values { get; } = [];
-
-        public void Report(double value) => Values.Add(value);
     }
 }

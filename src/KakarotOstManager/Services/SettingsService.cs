@@ -31,14 +31,6 @@ public sealed class SettingsService(AppPaths paths)
         }
     }
 
-    public void Save(AppSettings settings)
-    {
-        Directory.CreateDirectory(paths.RootDirectory);
-
-        // Écriture dans un fichier provisoire puis renommage : si l'écriture
-        // est interrompue, l'ancien settings.json reste intact.
-        string tempFile = paths.SettingsFile + ".tmp";
-        File.WriteAllText(tempFile, JsonSerializer.Serialize(settings, JsonDefaults.Options));
-        File.Move(tempFile, paths.SettingsFile, overwrite: true);
-    }
+    public void Save(AppSettings settings) =>
+        AtomicFile.WriteAllText(paths.SettingsFile, JsonSerializer.Serialize(settings, JsonDefaults.Options));
 }
