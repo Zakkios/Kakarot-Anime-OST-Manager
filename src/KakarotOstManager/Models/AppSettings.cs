@@ -19,4 +19,7 @@ public sealed class AppSettings
 
     /// <summary>Identifiant de la dernière bande-son installée par l'application.</summary>
     public string? CurrentSoundtrackId { get; set; }
+
+    /// <summary>« fr » ou « en ». Tant que rien n'est choisi, la langue de Windows est utilisée.</summary>
+    public string? Language { get; set; }
 }

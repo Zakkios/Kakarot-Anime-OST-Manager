@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textes de l'interface en anglais, la langue par défaut. Chaque clé doit aussi exister dans Strings.fr.resx. -->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Fenêtre principale -->
+  <data name="AppTitle" xml:space="preserve"><value>Kakarot Anime OST Manager</value></data>
+  <data name="GameFolderLabel" xml:space="preserve"><value>Game folder</value></data>
+  <data name="PackFolderLabel" xml:space="preserve"><value>Soundtrack pack folder</value></data>
+  <data name="FolderNotSet" xml:space="preserve"><value>No folder selected</value></data>
+  <data name="Browse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="GameVersionLabel" xml:space="preserve"><value>Game version</value></data>
+  <data name="VersionStandard" xml:space="preserve"><value>Standard</value></data>
+  <data name="VersionRemaster" xml:space="preserve"><value>HD / Remaster</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Language</value></data>
+  <data name="SoundtracksHeader" xml:space="preserve"><value>Soundtracks</value></data>
+  <data name="CategoryMain" xml:space="preserve"><value>Main story</value></data>
+  <data name="CategoryDlc" xml:space="preserve"><value>DLC</value></data>
+  <data name="CategoryOther" xml:space="preserve"><value>Other</value></data>
+  <data name="InstalledBadge" xml:space="preserve"><value>installed</value></data>
+  <data name="SelectSoundtrackPrompt" xml:space="preserve"><value>Select a soundtrack in the list.</value></data>
+  <data name="WhenToActivate" xml:space="preserve"><value>When to activate</value></data>
+  <data name="NoHintYet" xml:space="preserve"><value>No guidance available yet for this soundtrack.</value></data>
+  <data name="FolderLabel" xml:space="preserve"><value>Folder</value></data>
+  <data name="InstalledLabel" xml:space="preserve"><value>Currently installed soundtrack</value></data>
+  <data name="Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="RestoreOriginal" xml:space="preserve"><value>Restore original soundtrack</value></data>
+
+  <!-- Boîtes de sélection de dossier -->
+  <data name="PickGameFolderTitle" xml:space="preserve"><value>Select the DRAGON BALL Z KAKAROT folder</value></data>
+  <data name="PickPackFolderTitle" xml:space="preserve"><value>Select the folder containing the soundtrack pack</value></data>
+
+  <!-- Bande-son actuellement installée -->
+  <data name="InstalledVanilla" xml:space="preserve"><value>Original soundtrack</value></data>
+  <data name="InstalledUnknownNoBackup" xml:space="preserve"><value>Unrecognized file (most likely the original soundtrack)</value></data>
+  <data name="InstalledUnknown" xml:space="preserve"><value>Unrecognized file</value></data>
+  <data name="InstalledNoFile" xml:space="preserve"><value>No Bgm.awb file in the game folder</value></data>
+  <data name="InstalledNotConfigured" xml:space="preserve"><value>—</value></data>
+
+  <!-- Erreurs -->
+  <data name="ErrorGameFolderInvalid" xml:space="preserve"><value>The selected folder does not appear to contain Dragon Ball Z: Kakarot.</value></data>
+  <data name="ErrorBgmFolderMissing" xml:space="preserve"><value>The BGM folder for this game version was not found in the game folder.</value></data>
+  <data name="ErrorNoSoundtrackFound" xml:space="preserve"><value>No Bgm.awb file was found.</value></data>
+  <data name="ErrorGameRunning" xml:space="preserve"><value>Dragon Ball Z: Kakarot is currently running. The soundtrack cannot be changed while the game is running. Close the game, then try again.</value></data>
+  <data name="ErrorSourceMissing" xml:space="preserve"><value>The Bgm.awb file for {0} could not be found.</value></data>
+  <data name="ErrorCopyFailed" xml:space="preserve"><value>The file could not be replaced. Check the folder permissions.</value></data>
+  <data name="ErrorBackupFailed" xml:space="preserve"><value>The original soundtrack could not be backed up. Nothing was changed.</value></data>
+  <data name="ErrorVerificationFailed" xml:space="preserve"><value>The copy does not match the source file. The game file was not changed.</value></data>
+  <data name="ErrorGameVersionMissing" xml:space="preserve"><value>Choose the game version first.</value></data>
+  <data name="ErrorNoBackup" xml:space="preserve"><value>No backup of the original soundtrack is available.</value></data>
+  <data name="ErrorCatalog" xml:space="preserve"><value>The soundtracks.json file could not be read: {0}</value></data>
+  <data name="ErrorUnexpected" xml:space="preserve"><value>Unexpected error: {0}</value></data>
+
+  <!-- Messages d'état -->
+  <data name="StatusCancelled" xml:space="preserve"><value>Operation cancelled.</value></data>
+  <data name="StatusAnalyzing" xml:space="preserve"><value>Analyzing files…</value></data>
+  <data name="SuccessInstalled" xml:space="preserve"><value>{0} soundtrack installed successfully. You can now launch Dragon Ball Z: Kakarot.</value></data>
+  <data name="SuccessRestored" xml:space="preserve"><value>Original soundtrack restored.</value></data>
+  <data name="InstallingTitle" xml:space="preserve"><value>Installing {0}…</value></data>
+  <data name="RestoringTitle" xml:space="preserve"><value>Restoring the original soundtrack…</value></data>
+
+  <!-- Étapes d'une opération : « Step » + valeur de l'enum InstallStep -->
+  <data name="StepAnalyzing" xml:space="preserve"><value>Identifying the current file…</value></data>
+  <data name="StepBackingUp" xml:space="preserve"><value>Backing up the current file…</value></data>
+  <data name="StepCopying" xml:space="preserve"><value>Copying…</value></data>
+  <data name="StepVerifying" xml:space="preserve"><value>Verifying…</value></data>
+  <data name="StepDone" xml:space="preserve"><value>Done.</value></data>
+
+  <!-- Contrôles préalables : « Check » + valeur de l'enum CheckId -->
+  <data name="CheckGameDirectory" xml:space="preserve"><value>Kakarot folder is valid</value></data>
+  <data name="CheckGameVersion" xml:space="preserve"><value>Game version is set</value></data>
+  <data name="CheckBgmDirectory" xml:space="preserve"><value>Game BGM folder found</value></data>
+  <data name="CheckSoundtrackDirectory" xml:space="preserve"><value>Soundtrack pack folder is valid</value></data>
+  <data name="CheckSourceFile" xml:space="preserve"><value>Source Bgm.awb found</value></data>
+  <data name="CheckGameNotRunning" xml:space="preserve"><value>Kakarot is not running</value></data>
+  <data name="CheckOriginalFileSafe" xml:space="preserve"><value>Original soundtrack is safe</value></data>
+  <data name="CheckVanillaBackupAvailable" xml:space="preserve"><value>Original soundtrack backup available</value></data>
+</root>

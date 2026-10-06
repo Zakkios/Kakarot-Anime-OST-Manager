@@ -11,11 +11,17 @@
   <PropertyGroup>
     <Product>Kakarot Anime OST Manager</Product>
     <Version>0.1.0</Version>
+    <!-- Langue de Strings.resx ; Strings.fr.resx est compilé à part. -->
+    <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- Copié à côté de l'exécutable pour rester modifiable sans recompiler. -->
     <None Update="Data\soundtracks.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
   </ItemGroup>
 
 </Project>
