@@ -14,7 +14,7 @@ internal sealed class TestEnvironment : IDisposable
 
     public TestEnvironment(GameVersion version = GameVersion.Standard, HashService? hashService = null)
     {
-        Game = new GameService(Processes);
+        Game = new GameService(Processes, Shell);
         Paths = new AppPaths(Temp.Combine("appdata"));
         HashService = hashService ?? new HashService();
         Copier = new FileCopyService(HashService);
@@ -42,6 +42,8 @@ internal sealed class TestEnvironment : IDisposable
     public TempDirectory Temp { get; } = new();
 
     public FakeProcessProbe Processes { get; } = new();
+
+    public FakeShellLauncher Shell { get; } = new();
 
     public AppPaths Paths { get; }
 
@@ -112,6 +114,33 @@ internal sealed class FakeProcessProbe : IProcessProbe
     public HashSet<string> Running { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public bool IsRunning(string processName) => Running.Contains(processName);
+}
+
+/// <summary>Note ce que l'application aurait demandé à Windows d'ouvrir, sans rien ouvrir.</summary>
+internal sealed class FakeShellLauncher : IShellLauncher
+{
+    public List<string> Opened { get; } = [];
+
+    /// <summary>Erreur à simuler, par exemple quand Steam n'est pas installé.</summary>
+    public Exception? Failure { get; set; }
+
+    public void Open(string target)
+    {
+        if (Failure is not null)
+        {
+            throw Failure;
+        }
+
+        Opened.Add(target);
+    }
+}
+
+internal sealed class FakeSteamLocator : ISteamLocator
+{
+    /// <summary>Dossier que « Steam » indiquera ; <c>null</c> si le jeu est introuvable.</summary>
+    public string? GameDirectory { get; set; }
+
+    public string? FindGameDirectory() => GameDirectory;
 }
 
 /// <summary>Enregistre chaque valeur d'avancement reçue, immédiatement et dans l'ordre.</summary>

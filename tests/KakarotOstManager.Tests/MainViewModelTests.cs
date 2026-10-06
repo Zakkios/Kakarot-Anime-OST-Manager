@@ -26,6 +26,8 @@ public class MainViewModelTests
 
         public FakeFolderPicker Picker { get; } = new();
 
+        public FakeSteamLocator Steam { get; } = new();
+
         public Localizer Localizer { get; } = new();
 
         public MainViewModel ViewModel { get; }
@@ -36,7 +38,7 @@ public class MainViewModelTests
             var catalog = SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath);
             return new MainViewModel(
                 Env.SettingsService, Env.Game, new SoundtrackService(catalog), Env.Installer, Env.Backups,
-                Picker, Localizer);
+                Picker, Steam, Localizer);
         }
 
         public SoundtrackItemViewModel Item(string id) =>
@@ -354,6 +356,148 @@ public class MainViewModelTests
 
         Assert.Equal("05 — Cell", restarted.InstalledTitle);
         Assert.Equal("05-cell", screen.Env.SettingsService.Load().CurrentSoundtrackId);
+    }
+
+    // ---------------------------------------------------------------- détection automatique
+
+    [Fact]
+    public async Task Au_premier_lancement_le_dossier_du_jeu_est_trouve_grace_a_Steam()
+    {
+        using var screen = new Screen(saveSettings: false);
+        screen.Steam.GameDirectory = screen.Env.Settings.GamePath;
+
+        await screen.ViewModel.InitializeAsync();
+
+        Assert.Equal(screen.Env.Settings.GamePath, screen.ViewModel.GamePath);
+        Assert.True(screen.ViewModel.IsStandard);
+        Assert.Equal(StatusKind.Info, screen.ViewModel.Status);
+        Assert.Equal("Dossiers détectés automatiquement. Vérifiez-les avant de continuer.", screen.ViewModel.StatusMessage);
+        Assert.Equal(screen.Env.Settings.GamePath, screen.Env.SettingsService.Load().GamePath);
+    }
+
+    [Fact]
+    public async Task Un_pack_range_dans_le_dossier_BGM_du_jeu_est_detecte()
+    {
+        using var screen = new Screen(saveSettings: false);
+        screen.Steam.GameDirectory = screen.Env.Settings.GamePath;
+        string bgmDirectory = Path.GetDirectoryName(screen.Env.GameFile)!;
+        File.WriteAllText(
+            Path.Combine(Directory.CreateDirectory(Path.Combine(bgmDirectory, "03 - Namek")).FullName, "Bgm.awb"),
+            TestEnvironment.Content("musique 03 - Namek"));
+
+        await screen.ViewModel.InitializeAsync();
+
+        Assert.Equal(bgmDirectory, screen.ViewModel.SoundtrackPath);
+        Assert.Equal("03 — Namek", Assert.Single(screen.ViewModel.Soundtracks).Title);
+    }
+
+    [Fact]
+    public async Task Un_dossier_deja_enregistre_n_est_pas_remplace_par_la_detection()
+    {
+        using var screen = new Screen();
+        screen.Steam.GameDirectory = screen.Env.Temp.CreateDirectory("autre-installation");
+
+        await screen.ViewModel.InitializeAsync();
+
+        Assert.Equal(screen.Env.Settings.GamePath, screen.ViewModel.GamePath);
+    }
+
+    // ---------------------------------------------------------------- lancer le jeu
+
+    [Fact]
+    public async Task Lancer_le_jeu_passe_par_Steam()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+
+        screen.ViewModel.LaunchGameCommand.Execute(null);
+
+        Assert.Equal(["steam://rungameid/851850"], screen.Env.Shell.Opened);
+        Assert.Equal(StatusKind.Info, screen.ViewModel.Status);
+        Assert.Equal("Lancement du jeu via Steam…", screen.ViewModel.StatusMessage);
+    }
+
+    [Fact]
+    public async Task Un_echec_du_lancement_est_affiche()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+        screen.Env.Shell.Failure = new InvalidOperationException("Steam est introuvable");
+
+        screen.ViewModel.LaunchGameCommand.Execute(null);
+
+        Assert.Equal(StatusKind.Error, screen.ViewModel.Status);
+        Assert.Equal("Impossible de lancer le jeu via Steam : Steam est introuvable", screen.ViewModel.StatusMessage);
+    }
+
+    // ---------------------------------------------------------------- précédente, suivante
+
+    [Fact]
+    public async Task La_precedente_et_la_suivante_de_la_selection_sont_affichees()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+
+        screen.ViewModel.SelectedSoundtrack = screen.Item("03-namek");
+
+        Assert.True(screen.ViewModel.HasSelectedNeighbors);
+        Assert.Equal("01 — Raditz", screen.ViewModel.SelectedPrevious);
+        Assert.Equal("05 — Cell", screen.ViewModel.SelectedNext);
+    }
+
+    [Fact]
+    public async Task Le_premier_chapitre_n_a_pas_de_precedente()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+
+        screen.ViewModel.SelectedSoundtrack = screen.Item("01-raditz");
+
+        Assert.Equal("—", screen.ViewModel.SelectedPrevious);
+        Assert.Equal("03 — Namek", screen.ViewModel.SelectedNext);
+    }
+
+    [Fact]
+    public async Task Tant_que_la_musique_d_origine_est_en_place_le_premier_chapitre_est_propose()
+    {
+        using var screen = new Screen();
+
+        await screen.ViewModel.InitializeAsync();
+
+        Assert.True(screen.ViewModel.HasNextUp);
+        Assert.Equal("01 — Raditz", screen.ViewModel.NextUpTitle);
+        Assert.True(screen.ViewModel.InstallNextCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public async Task Installer_l_OST_suivante_installe_le_chapitre_qui_suit_celui_en_place()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+        screen.ViewModel.SelectedSoundtrack = screen.Item("01-raditz");
+        await screen.ViewModel.ApplyCommand.ExecuteAsync(null);
+        Assert.Equal("03 — Namek", screen.ViewModel.NextUpTitle);
+
+        await screen.ViewModel.InstallNextCommand.ExecuteAsync(null);
+
+        Assert.Equal(TestEnvironment.ContentOf(screen.Env.Namek), screen.Env.GameFileContent);
+        Assert.Equal("03 — Namek", screen.ViewModel.InstalledTitle);
+        Assert.Equal("03 — Namek", screen.ViewModel.SelectedTitle);
+        Assert.Equal("05 — Cell", screen.ViewModel.NextUpTitle);
+    }
+
+    [Fact]
+    public async Task Au_dernier_chapitre_plus_rien_n_est_propose()
+    {
+        using var screen = new Screen();
+        await screen.ViewModel.InitializeAsync();
+        screen.ViewModel.SelectedSoundtrack = screen.Item("05-cell");
+
+        await screen.ViewModel.ApplyCommand.ExecuteAsync(null);
+
+        Assert.False(screen.ViewModel.HasNextUp);
+        Assert.Equal("", screen.ViewModel.NextUpTitle);
+        Assert.False(screen.ViewModel.InstallNextCommand.CanExecute(null));
     }
 
     // ---------------------------------------------------------------- langue

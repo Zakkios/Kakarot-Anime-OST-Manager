@@ -86,4 +86,15 @@
   <data name="CheckGameNotRunning" xml:space="preserve"><value>Kakarot is not running</value></data>
   <data name="CheckOriginalFileSafe" xml:space="preserve"><value>Original soundtrack is safe</value></data>
   <data name="CheckVanillaBackupAvailable" xml:space="preserve"><value>Original soundtrack backup available</value></data>
+
+  <!-- Jalon 4 : lancement du jeu, précédente / suivante, détection automatique -->
+  <data name="LaunchGame" xml:space="preserve"><value>Launch Dragon Ball Z: Kakarot</value></data>
+  <data name="StatusLaunching" xml:space="preserve"><value>Launching the game through Steam…</value></data>
+  <data name="ErrorLaunchFailed" xml:space="preserve"><value>The game could not be launched through Steam: {0}</value></data>
+  <data name="PreviousSoundtrack" xml:space="preserve"><value>Previous soundtrack</value></data>
+  <data name="NextSoundtrack" xml:space="preserve"><value>Next soundtrack</value></data>
+  <data name="NoneValue" xml:space="preserve"><value>—</value></data>
+  <data name="NextUpLabel" xml:space="preserve"><value>Next soundtrack to install</value></data>
+  <data name="InstallNext" xml:space="preserve"><value>Install next soundtrack</value></data>
+  <data name="StatusAutoDetected" xml:space="preserve"><value>Folders detected automatically. Check them before continuing.</value></data>
 </root>

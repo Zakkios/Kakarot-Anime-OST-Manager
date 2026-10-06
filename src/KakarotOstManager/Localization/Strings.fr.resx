@@ -86,4 +86,15 @@
   <data name="CheckGameNotRunning" xml:space="preserve"><value>Kakarot n'est pas lancé</value></data>
   <data name="CheckOriginalFileSafe" xml:space="preserve"><value>Bande-son originale à l'abri</value></data>
   <data name="CheckVanillaBackupAvailable" xml:space="preserve"><value>Sauvegarde de la bande-son originale disponible</value></data>
+
+  <!-- Jalon 4 : lancement du jeu, précédente / suivante, détection automatique -->
+  <data name="LaunchGame" xml:space="preserve"><value>Lancer Dragon Ball Z: Kakarot</value></data>
+  <data name="StatusLaunching" xml:space="preserve"><value>Lancement du jeu via Steam…</value></data>
+  <data name="ErrorLaunchFailed" xml:space="preserve"><value>Impossible de lancer le jeu via Steam : {0}</value></data>
+  <data name="PreviousSoundtrack" xml:space="preserve"><value>Bande-son précédente</value></data>
+  <data name="NextSoundtrack" xml:space="preserve"><value>Bande-son suivante</value></data>
+  <data name="NoneValue" xml:space="preserve"><value>—</value></data>
+  <data name="NextUpLabel" xml:space="preserve"><value>Prochaine bande-son à installer</value></data>
+  <data name="InstallNext" xml:space="preserve"><value>Installer l'OST suivante</value></data>
+  <data name="StatusAutoDetected" xml:space="preserve"><value>Dossiers détectés automatiquement. Vérifiez-les avant de continuer.</value></data>
 </root>

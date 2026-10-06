@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:KakarotOstManager.Localization"
         Title="{loc:Loc AppTitle}"
-        Height="780" Width="980"
-        MinHeight="640" MinWidth="860"
+        Height="820" Width="1000"
+        MinHeight="720" MinWidth="900"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -185,6 +185,22 @@
 
                     <TextBlock Style="{StaticResource SectionLabel}" Text="{loc:Loc FolderLabel}" />
                     <TextBlock Text="{Binding SelectedFolder}" TextWrapping="Wrap" />
+
+                    <!-- Précédente et suivante : seulement pour un chapitre de l'histoire -->
+                    <Grid Visibility="{Binding HasSelectedNeighbors, Converter={StaticResource BoolToVisibility}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Style="{StaticResource SectionLabel}" Text="{loc:Loc PreviousSoundtrack}" />
+                            <TextBlock Text="{Binding SelectedPrevious}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Style="{StaticResource SectionLabel}" Text="{loc:Loc NextSoundtrack}" />
+                            <TextBlock Text="{Binding SelectedNext}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
 
                 <TextBlock Grid.Row="0" Opacity="0.7" Text="{loc:Loc SelectSoundtrackPrompt}">
@@ -205,12 +221,27 @@
                     <TextBlock Style="{StaticResource SectionLabel}" Text="{loc:Loc InstalledLabel}" />
                     <TextBlock Text="{Binding InstalledTitle}" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" />
 
-                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
-                        <Button Padding="28,10" MinWidth="160" FontWeight="Bold" IsDefault="True"
-                                Content="{loc:Loc Apply}" Command="{Binding ApplyCommand}" />
-                        <Button Padding="18,10" Margin="12,0,0,0"
-                                Content="{loc:Loc RestoreOriginal}" Command="{Binding RestoreCommand}" />
+                    <!-- Raccourci : installer directement le chapitre suivant de l'histoire -->
+                    <StackPanel Visibility="{Binding HasNextUp, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Style="{StaticResource SectionLabel}" Text="{loc:Loc NextUpLabel}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding NextUpTitle}" FontSize="16" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                            <Button Padding="14,6" Margin="16,0,0,0"
+                                    Content="{loc:Loc InstallNext}" Command="{Binding InstallNextCommand}" />
+                        </StackPanel>
                     </StackPanel>
+
+                    <!-- WrapPanel : les boutons passent à la ligne si la fenêtre est étroite. -->
+                    <WrapPanel Margin="0,14,0,0">
+                        <Button Padding="28,10" MinWidth="150" Margin="0,6,12,0" FontWeight="Bold" IsDefault="True"
+                                Style="{DynamicResource AccentButtonStyle}"
+                                Content="{loc:Loc Apply}" Command="{Binding ApplyCommand}" />
+                        <Button Padding="18,10" Margin="0,6,12,0"
+                                Content="{loc:Loc RestoreOriginal}" Command="{Binding RestoreCommand}" />
+                        <Button Padding="18,10" Margin="0,6,0,0"
+                                Content="{loc:Loc LaunchGame}" Command="{Binding LaunchGameCommand}" />
+                    </WrapPanel>
                 </StackPanel>
             </Grid>
         </Grid>

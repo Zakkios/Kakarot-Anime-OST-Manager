@@ -21,6 +21,7 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly InstallService _installService;
     private readonly BackupService _backupService;
     private readonly IFolderPicker _folderPicker;
+    private readonly ISteamLocator _steamLocator;
     private readonly Localizer _loc;
 
     private AppSettings _settings = new();
@@ -28,6 +29,7 @@ public sealed partial class MainViewModel : ObservableObject
     private InstalledState _installed = InstalledState.NoGameFile;
     private IReadOnlyList<CheckResult> _lastChecks = [];
     private InstallStep? _currentStep;
+    private Soundtrack? _nextUp;
     private bool _applyingLanguageFromSettings;
 
     // Le message d'état est mémorisé sous forme de fonction : elle est
@@ -41,6 +43,7 @@ public sealed partial class MainViewModel : ObservableObject
         InstallService installService,
         BackupService backupService,
         IFolderPicker folderPicker,
+        ISteamLocator steamLocator,
         Localizer localizer)
     {
         _settingsService = settingsService;
@@ -49,6 +52,7 @@ public sealed partial class MainViewModel : ObservableObject
         _installService = installService;
         _backupService = backupService;
         _folderPicker = folderPicker;
+        _steamLocator = steamLocator;
         _loc = localizer;
 
         GamePath = "";
@@ -58,7 +62,10 @@ public sealed partial class MainViewModel : ObservableObject
         SelectedTitle = "";
         SelectedHint = "";
         SelectedFolder = "";
+        SelectedPrevious = "";
+        SelectedNext = "";
         InstalledTitle = "";
+        NextUpTitle = "";
         StatusMessage = "";
         ProgressText = "";
 
@@ -113,6 +120,23 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial string SelectedFolder { get; set; }
 
+    /// <summary>Vrai pour un chapitre de l'histoire : lui seul a une précédente et une suivante.</summary>
+    [ObservableProperty]
+    public partial bool HasSelectedNeighbors { get; set; }
+
+    [ObservableProperty]
+    public partial string SelectedPrevious { get; set; }
+
+    [ObservableProperty]
+    public partial string SelectedNext { get; set; }
+
+    /// <summary>Titre de la bande-son qui suit celle actuellement installée ; vide s'il n'y en a pas.</summary>
+    [ObservableProperty]
+    public partial string NextUpTitle { get; set; }
+
+    [ObservableProperty]
+    public partial bool HasNextUp { get; set; }
+
     /// <summary>Ce que contient réellement le jeu, par exemple « 03 — Namek ».</summary>
     [ObservableProperty]
     public partial string InstalledTitle { get; set; }
@@ -133,6 +157,8 @@ public sealed partial class MainViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RestoreCommand))]
     [NotifyCanExecuteChangedFor(nameof(BrowseGameFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(BrowseSoundtrackFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(InstallNextCommand))]
+    [NotifyCanExecuteChangedFor(nameof(LaunchGameCommand))]
     [NotifyPropertyChangedFor(nameof(IsIdle))]
     public partial bool IsBusy { get; set; }
 
@@ -190,7 +216,19 @@ public sealed partial class MainViewModel : ObservableObject
         SelectedLanguage = Languages.First(language => language.Code == _loc.Language);
         _applyingLanguageFromSettings = false;
 
+        bool autoDetected = false;
+        if (string.IsNullOrWhiteSpace(_settings.GamePath) && _steamLocator.FindGameDirectory() is { } gameDirectory)
+        {
+            _settings.GamePath = gameDirectory;
+            autoDetected = true;
+        }
+
         _settings.GameVersion ??= _gameService.DetectVersion(_settings.GamePath);
+        autoDetected |= TryDetectPackInGameFolder();
+        if (autoDetected)
+        {
+            _settingsService.Save(_settings);
+        }
 
         RefreshGameFields();
         ReloadSoundtracks();
@@ -202,6 +240,34 @@ public sealed partial class MainViewModel : ObservableObject
         {
             SetStatus(StatusKind.Error, () => _loc.Format("ErrorCatalog", catalogError.Message));
         }
+        else if (autoDetected)
+        {
+            SetStatus(StatusKind.Info, () => _loc["StatusAutoDetected"]);
+        }
+    }
+
+    /// <summary>
+    /// Beaucoup de joueurs extraient le pack directement dans le dossier BGM
+    /// du jeu. Si aucun dossier de pack n'est encore choisi et que des
+    /// bandes-son s'y trouvent, on le propose d'office.
+    /// </summary>
+    private bool TryDetectPackInGameFolder()
+    {
+        if (!string.IsNullOrWhiteSpace(_settings.SoundtrackPath)
+            || string.IsNullOrWhiteSpace(_settings.GamePath)
+            || _settings.GameVersion is null)
+        {
+            return false;
+        }
+
+        string bgmDirectory = _gameService.GetBgmDirectory(_settings.GamePath, _settings.GameVersion.Value);
+        if (_soundtrackService.FindSoundtracks(bgmDirectory).Count == 0)
+        {
+            return false;
+        }
+
+        _settings.SoundtrackPath = bgmDirectory;
+        return true;
     }
 
     // ------------------------------------------------------------ commandes
@@ -218,10 +284,17 @@ public sealed partial class MainViewModel : ObservableObject
         _settings.GamePath = folder;
         // Nouveau dossier : la version est redétectée plutôt que conservée.
         _settings.GameVersion = _gameService.DetectVersion(folder) ?? _settings.GameVersion;
+        bool packDetected = TryDetectPackInGameFolder();
         _settingsService.Save(_settings);
 
         RefreshGameFields();
+        if (packDetected)
+        {
+            ReloadSoundtracks();
+        }
+
         await RefreshInstalledAsync(showAnalyzing: true);
+        SelectedSoundtrack ??= Soundtracks.FirstOrDefault(item => item.IsActive) ?? Soundtracks.FirstOrDefault();
     }
 
     [RelayCommand(CanExecute = nameof(IsIdle))]
@@ -265,6 +338,34 @@ public sealed partial class MainViewModel : ObservableObject
             operation: progress => _installService.RestoreVanillaAsync(_settings, _pack, progress),
             successText: () => _loc["SuccessRestored"],
             soundtrack: null);
+    }
+
+    private bool CanInstallNext() => IsIdle && _nextUp is not null;
+
+    /// <summary>Installe la bande-son qui suit, dans l'histoire, celle actuellement en place.</summary>
+    [RelayCommand(CanExecute = nameof(CanInstallNext))]
+    private async Task InstallNextAsync()
+    {
+        string nextId = _nextUp!.Id;
+        SelectedSoundtrack = Soundtracks.FirstOrDefault(item => item.Soundtrack.Id == nextId);
+        if (SelectedSoundtrack is not null)
+        {
+            await ApplyAsync();
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(IsIdle))]
+    private void LaunchGame()
+    {
+        try
+        {
+            _gameService.LaunchKakarot();
+            SetStatus(StatusKind.Info, () => _loc["StatusLaunching"]);
+        }
+        catch (Exception ex)
+        {
+            SetStatus(StatusKind.Error, () => _loc.Format("ErrorLaunchFailed", ex.Message));
+        }
     }
 
     // ------------------------------------------------------------ réactions
@@ -378,6 +479,8 @@ public sealed partial class MainViewModel : ObservableObject
             item.IsActive = _installed.Soundtrack?.Id == item.Soundtrack.Id;
         }
 
+        RefreshNextUp();
+
         if (showAnalyzing)
         {
             SetStatus(StatusKind.None, null);
@@ -429,6 +532,7 @@ public sealed partial class MainViewModel : ObservableObject
         RebuildSoundtrackItems();
         RefreshSelection();
         InstalledTitle = DescribeInstalled();
+        RefreshNextUp();
         StatusMessage = _statusText?.Invoke() ?? "";
         RebuildChecks();
         if (_currentStep is not null)
@@ -476,7 +580,32 @@ public sealed partial class MainViewModel : ObservableObject
 
         string hint = soundtrack?.ActivationHint.Get(_loc.Language) ?? "";
         SelectedHint = hint.Length > 0 ? hint : _loc["NoHintYet"];
+
+        HasSelectedNeighbors = soundtrack?.Category == SoundtrackCategory.Main;
+        SelectedPrevious = TitleOrNone(soundtrack is null ? null : SoundtrackService.GetPrevious(_pack, soundtrack));
+        SelectedNext = TitleOrNone(soundtrack is null ? null : SoundtrackService.GetNext(_pack, soundtrack));
     }
+
+    /// <summary>
+    /// Détermine la bande-son à proposer ensuite : celle qui suit la bande-son
+    /// en place, ou le premier chapitre tant que la musique d'origine est là.
+    /// </summary>
+    private void RefreshNextUp()
+    {
+        _nextUp = _installed.Kind switch
+        {
+            InstalledKind.Soundtrack => SoundtrackService.GetNext(_pack, _installed.Soundtrack!),
+            InstalledKind.Vanilla or InstalledKind.Unknown =>
+                _pack.FirstOrDefault(soundtrack => soundtrack.Category == SoundtrackCategory.Main),
+            _ => null,
+        };
+
+        HasNextUp = _nextUp is not null;
+        NextUpTitle = _nextUp is null ? "" : TitleOf(_nextUp);
+        InstallNextCommand.NotifyCanExecuteChanged();
+    }
+
+    private string TitleOrNone(Soundtrack? soundtrack) => soundtrack is null ? _loc["NoneValue"] : TitleOf(soundtrack);
 
     private void RebuildChecks()
     {

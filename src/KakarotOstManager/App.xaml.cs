@@ -51,7 +51,7 @@ public partial class App : Application
 
         var viewModel = new MainViewModel(
             settingsService, gameService, soundtrackService, installService, backupService,
-            new FolderPicker(), Localizer.Instance);
+            new FolderPicker(), new SteamLocator(gameService), Localizer.Instance);
 
         var window = new MainWindow { DataContext = viewModel };
         window.Show();

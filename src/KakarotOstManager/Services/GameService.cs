@@ -19,8 +19,23 @@ public enum GameDirectoryStatus
 }
 
 /// <summary>Tout ce qui concerne l'installation du jeu sur le disque.</summary>
-public sealed class GameService(IProcessProbe? processProbe = null)
+public sealed class GameService(IProcessProbe? processProbe = null, IShellLauncher? shellLauncher = null)
 {
+    /// <summary>Identifiant de Dragon Ball Z: Kakarot dans le magasin Steam.</summary>
+    public const string SteamAppId = "851850";
+
+    /// <summary>Adresse qui demande à Steam de lancer le jeu.</summary>
+    public const string SteamLaunchUri = "steam://rungameid/" + SteamAppId;
+
+    private readonly IShellLauncher _shellLauncher = shellLauncher ?? new SystemShellLauncher();
+
+    /// <summary>
+    /// Lance le jeu en passant par Steam plutôt que par son exécutable, pour
+    /// conserver l'overlay, les sauvegardes dans le cloud et le temps de jeu.
+    /// </summary>
+    /// <exception cref="System.ComponentModel.Win32Exception">Aucun programme n'est associé aux adresses « steam:// ».</exception>
+    public void LaunchKakarot() => _shellLauncher.Open(SteamLaunchUri);
+
     public const string BgmFileName = "Bgm.awb";
 
     /// <summary>
