@@ -41,7 +41,7 @@ public partial class App : Application
         SoundtrackService soundtrackService;
         try
         {
-            soundtrackService = new SoundtrackService(SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath));
+            soundtrackService = new SoundtrackService(SoundtrackCatalogLoader.LoadDefault());
         }
         catch (Exception ex) when (ex is IOException or JsonException or ArgumentException)
         {

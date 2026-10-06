@@ -35,7 +35,7 @@ public class MainViewModelTests
         /// <summary>Simule un redémarrage de l'application sur les mêmes fichiers.</summary>
         public MainViewModel CreateViewModel()
         {
-            var catalog = SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath);
+            var catalog = SoundtrackCatalogLoader.LoadEmbedded();
             return new MainViewModel(
                 Env.SettingsService, Env.Game, new SoundtrackService(catalog), Env.Installer, Env.Backups,
                 Picker, Steam, Localizer);

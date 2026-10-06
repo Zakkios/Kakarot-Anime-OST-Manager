@@ -35,7 +35,7 @@ internal sealed class TestEnvironment : IDisposable
             Temp.CreateFile(Content($"musique {name}"), "pack", name, "Bgm.awb");
         }
 
-        var catalog = SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath);
+        var catalog = SoundtrackCatalogLoader.LoadEmbedded();
         Pack = new SoundtrackService(catalog).FindSoundtracks(packPath);
     }
 

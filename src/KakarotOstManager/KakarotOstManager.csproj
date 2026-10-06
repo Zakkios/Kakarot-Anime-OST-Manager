@@ -16,8 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Copié à côté de l'exécutable pour rester modifiable sans recompiler. -->
-    <None Update="Data\soundtracks.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Intégré dans l'exécutable : l'application se distribue en un seul fichier. -->
+    <None Remove="Data\soundtracks.json" />
+    <EmbeddedResource Include="Data\soundtracks.json" LogicalName="KakarotOstManager.Data.soundtracks.json" />
   </ItemGroup>
 
   <ItemGroup>

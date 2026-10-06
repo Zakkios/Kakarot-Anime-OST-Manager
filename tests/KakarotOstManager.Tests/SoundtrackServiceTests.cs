@@ -88,7 +88,7 @@ public class SoundtrackServiceTests
 
     /// <summary>Service branché sur le vrai soundtracks.json livré avec l'application.</summary>
     private static SoundtrackService CreateService() =>
-        new(SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath));
+        new(SoundtrackCatalogLoader.LoadEmbedded());
 
     private static void AddSoundtrackFolder(TempDirectory pack, params string[] folderParts) =>
         pack.CreateFile("faux contenu audio", [.. folderParts, "Bgm.awb"]);

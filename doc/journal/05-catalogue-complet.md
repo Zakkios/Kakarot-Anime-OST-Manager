@@ -65,7 +65,7 @@ Deux détails :
 - Les dossiers 10 et 11 commencent tous deux par « Trunks ». C'est le **numéro** dans le motif (`10\\s*-\\s*Trunks`, `11\\s*-\\s*Trunks`) qui les départage.
 - Dans du JSON, un guillemet à l'intérieur d'un texte s'écrit `\"`.
 
-Comme ce fichier est copié à côté de l'exécutable, **un utilisateur peut lui-même le corriger ou le compléter** si le mod évolue, sans attendre une nouvelle version de l'application.
+**Un utilisateur peut lui-même corriger ou compléter le catalogue** si le mod évolue, sans attendre une nouvelle version de l'application : il lui suffit de poser son propre `Data\soundtracks.json` à côté de l'exécutable (voir [06-premiere-release](06-premiere-release.md)).
 
 ## 4. Une notion de test : `[MemberData]`
 

@@ -12,7 +12,7 @@ namespace KakarotOstManager.Tests;
 public class SoundtrackCatalogTests
 {
     private static SoundtrackCatalog LoadShippedCatalog() =>
-        SoundtrackCatalogLoader.Load(SoundtrackCatalogLoader.DefaultPath);
+        SoundtrackCatalogLoader.LoadEmbedded();
 
     [Fact]
     public void Le_catalogue_livre_contient_les_neuf_chapitres_de_l_histoire()
@@ -76,6 +76,29 @@ public class SoundtrackCatalogTests
             Assert.False(string.IsNullOrWhiteSpace(metadata.Name.Fr));
             Assert.False(string.IsNullOrWhiteSpace(metadata.Name.En));
         });
+    }
+
+    [Fact]
+    public void Sans_fichier_a_cote_de_l_executable_le_catalogue_integre_est_utilise()
+    {
+        using var temp = new TempDirectory();
+
+        SoundtrackCatalog catalog = SoundtrackCatalogLoader.LoadWithOverride(temp.Combine("Data", "soundtracks.json"));
+
+        Assert.Equal(18, catalog.Soundtracks.Count);
+    }
+
+    [Fact]
+    public void Un_fichier_a_cote_de_l_executable_remplace_le_catalogue_integre()
+    {
+        using var temp = new TempDirectory();
+        string file = temp.CreateFile(
+            """{ "soundtracks": [ { "id": "17-nouveau-dlc", "match": "17\\s*-" } ] }""",
+            "Data", "soundtracks.json");
+
+        SoundtrackCatalog catalog = SoundtrackCatalogLoader.LoadWithOverride(file);
+
+        Assert.Equal("17-nouveau-dlc", Assert.Single(catalog.Soundtracks).Id);
     }
 
     [Fact]
