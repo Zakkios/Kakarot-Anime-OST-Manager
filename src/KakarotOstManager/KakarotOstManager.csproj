@@ -13,4 +13,9 @@
     <Version>0.1.0</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Copié à côté de l'exécutable pour rester modifiable sans recompiler. -->
+    <None Update="Data\soundtracks.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

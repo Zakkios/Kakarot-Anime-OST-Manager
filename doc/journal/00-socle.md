@@ -89,7 +89,7 @@ Voici celui de l'application, [KakarotOstManager.csproj](../../src/KakarotOstMan
 | `OutputType = WinExe` | On produit un programme Windows avec fenêtre, sans console noire derrière. |
 | `TargetFramework = net10.0-windows` | On cible .NET 10. Le suffixe `-windows` donne accès aux fonctions propres à Windows, dont WPF. |
 | `Nullable = enable` | Le compilateur nous avertit quand une variable risque de valoir `null`. Cela évite la plus fréquente des erreurs à l'exécution. |
-| `ImplicitUsings = enable` | Les espaces de noms les plus courants (`System`, `System.IO`, `System.Linq`…) sont importés automatiquement dans chaque fichier. |
+| `ImplicitUsings = enable` | Les espaces de noms les plus courants (`System`, `System.Linq`, `System.Collections.Generic`…) sont importés automatiquement dans chaque fichier. |
 | `UseWPF = true` | Active WPF, la bibliothèque d'interface graphique. |
 
 Il n'y a nulle part de liste des fichiers `.cs` : tout fichier `.cs` présent dans le dossier du projet est compilé automatiquement.

@@ -1,0 +1,95 @@
+{
+  // Métadonnées des bandes-son du mod « Definitive Japanese Anime Soundtrack ».
+  //
+  // "match" est une expression régulière, insensible à la casse, testée sur le
+  // nom du dossier qui contient Bgm.awb. Exemple : "03\\s*-\\s*Namek" reconnaît
+  // aussi bien "03 - Namek" que "DBZ Kakarot Soundtrack JPN Mod 03 - Namek".
+  //
+  // Un dossier qui ne correspond à aucune entrée reste utilisable : il est
+  // affiché dans la rubrique « Autres ».
+  //
+  // Les "activationHint" sont vides en attendant le texte de la page Nexus.
+  "soundtracks": [
+    {
+      "id": "01-raditz",
+      "match": "01\\s*-\\s*Raditz",
+      "number": "01",
+      "name": { "fr": "Raditz", "en": "Raditz" },
+      "category": "main",
+      "order": 10,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "02-saiyans",
+      "match": "02\\s*-\\s*Saiyans",
+      "number": "02",
+      "name": { "fr": "Saiyans", "en": "Saiyans" },
+      "category": "main",
+      "order": 20,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "02.5-vegeta",
+      "match": "02\\.5\\s*-\\s*Vegeta",
+      "number": "02.5",
+      "name": { "fr": "Vegeta", "en": "Vegeta" },
+      "category": "main",
+      "order": 25,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "03-namek",
+      "match": "03\\s*-\\s*Namek",
+      "number": "03",
+      "name": { "fr": "Namek", "en": "Namek" },
+      "category": "main",
+      "order": 30,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "04-androids",
+      "match": "04\\s*-\\s*Androids",
+      "number": "04",
+      "name": { "fr": "Androids", "en": "Androids" },
+      "category": "main",
+      "order": 40,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "05-cell",
+      "match": "05\\s*-\\s*Cell",
+      "number": "05",
+      "name": { "fr": "Cell", "en": "Cell" },
+      "category": "main",
+      "order": 50,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "06-majin-buu",
+      "match": "06\\s*-\\s*Majin\\s*Buu",
+      "number": "06",
+      "name": { "fr": "Majin Buu", "en": "Majin Buu" },
+      "category": "main",
+      "order": 60,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "07-kid-buu",
+      "match": "07\\s*-\\s*Kid\\s*Buu",
+      "number": "07",
+      "name": { "fr": "Kid Buu", "en": "Kid Buu" },
+      "category": "main",
+      "order": 70,
+      "activationHint": { "fr": "", "en": "" }
+    },
+    {
+      "id": "07.5-post-game",
+      "match": "07\\.5\\s*-\\s*Post\\s*Game",
+      "number": "07.5",
+      "name": { "fr": "Post Game", "en": "Post Game" },
+      "category": "main",
+      "order": 75,
+      "activationHint": { "fr": "", "en": "" }
+    }
+  ]
+}
